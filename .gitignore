@@ -1,0 +1,45 @@
+# Ignore object files, compiled libraries, and executables
+*.o
+*.obj
+*.so
+*.dll
+*.a
+*.lib
+*.dylib
+*.exe
+*.out
+
+# Ignore build directories
+/build/
+/bin/
+/dist/
+/CMakeFiles/
+/CMakeCache.txt
+Makefile
+cmake_install.cmake
+
+# Ignore editor and IDE-specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+*.user
+*.ncb
+*.opt
+*.plg
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+*.cache
+*.bak
+
+# Ignore dependency manager files
+conanbuildinfo.cmake
+conanbuildinfo.txt
+conaninfo.txt
+graph_info.json
+vcpkg_installed/
+.vcpkg-root
