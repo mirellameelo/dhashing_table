@@ -6,32 +6,11 @@
 #include <map>
 #include <vector>
 #include <set>
+#include "finger_table.h"
 
 #define BITLENGTH 8  // Chord ring size is 2^BITLENGTH
 
 class Node;  // Forward declaration
-
-// --------------------
-// Finger Table Class
-// --------------------
-class FingerTable {
-public:
-    /**
-     * @param nodeId: the ID of the node hosting this finger table.
-     */
-    FingerTable(uint8_t nodeId);
-
-    void set(size_t index, Node* successor);
-    Node* get(size_t index);
-
-    // Print function for debugging
-    void prettyPrint();
-
-private:
-    uint8_t nodeId_;  // ID of the node that owns this table
-    // We store finger table entries from index 1..BITLENGTH
-    std::vector<Node*> fingerTable_;
-};
 
 // --------------------
 // Node Class (Chord Node)
@@ -89,9 +68,15 @@ public:
     Node* getPredecessor() { return predecessor_; }
     Node* getFinger(int i) { return fingerTable_.get(i); }
 
+    /**
+     * @brief Set successor and predecessor nodes
+     */
+    void setSuccessor(Node* node);
+    void setPredecessor(Node* node);
+
 private:
     uint8_t id_;                     // Unique node ID in [0 .. 2^BITLENGTH-1]
-    FingerTable fingerTable_;        // Node's finger table
+    FingerTable fingerTable_;         // ✅ Remove duplicate!
     std::map<uint8_t, uint8_t> localKeys_;  // Keys this node is responsible for
     Node* successor_;                // Pointer to successor node
     Node* predecessor_;              // Pointer to predecessor node
