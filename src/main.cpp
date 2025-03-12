@@ -167,6 +167,49 @@ int main() {
     n5->print_keys();
     n6->print_keys();
 
+    // 19. Re-stabilize the network after removal
+    for (int i = 0; i < 5; i++) {
+        n0->stabilize();
+        n1->stabilize();
+        n3->stabilize();
+        n4->stabilize();
+        n5->stabilize();
+        n6->stabilize();  // Keep stabilizing Node(100) if it exists
+    }
+    
+    // 20. Print the updated ring structure
+    std::cout << "\n=== Ring Structure After Removing Node 65 ===\n";
+    printRing(n0);
+
+    // 20. Fix finger tables for all nodes
+    for (int i = 0; i < 5; i++) {
+        n0->fix_fingers();
+        n1->fix_fingers();
+        n3->fix_fingers();
+        n4->fix_fingers();
+        n5->fix_fingers();
+        n6->fix_fingers();
+    }
+
+    // 21. Print the updated finger tables
+    std::cout << "\n=== Updated Finger Tables After Removing Node 65 ===\n";
+    n0->print_finger_table();
+    n1->print_finger_table();
+    n3->print_finger_table();
+    n4->print_finger_table();
+    n5->print_finger_table();
+    n6->print_finger_table();
+
+
+    // // 21. Print stored keys again to verify successful transfer
+    // std::cout << "\n=== Updated Stored Key-Value Pairs After Removing Node 65 ===\n";
+    // n0->print_keys();
+    // n1->print_keys();
+    // n3->print_keys();
+    // n4->print_keys();
+    // n5->print_keys();
+    // n6->print_keys();
+
     // 8. Clean up
     delete n0;
     delete n1;
@@ -174,6 +217,7 @@ int main() {
     delete n3;
     delete n4;
     delete n5;
+    delete n6;
 
     return 0;
 }

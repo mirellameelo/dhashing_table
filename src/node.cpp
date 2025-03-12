@@ -80,6 +80,36 @@ void Node::join(Node* knownNode) {
     fingerTable_.initialize();
 }
 
+void Node::leave() {
+    std::cout << "Node " << (int)id_ << " is leaving the ring.\n";
+
+    if (successor_ == this && predecessor_ == nullptr) {
+        // Only one node in the ring, it can simply leave.
+        std::cout << "Last node in the ring. Removing it.\n";
+        return;
+    }
+
+    // 1️⃣ Transfer stored keys to successor
+    if (successor_ != this) {
+        for (auto& kv : localKeys_) {
+            successor_->localKeys_[kv.first] = kv.second;
+            std::cout << "Transferred key " << (int)kv.first << " to Node " << (int)successor_->getId() << "\n";
+        }
+        localKeys_.clear();  // Empty key storage from this node
+    }
+
+    // 2️⃣ Update predecessor & successor links
+    if (predecessor_) {
+        predecessor_->setSuccessor(successor_);
+    }
+    if (successor_) {
+        successor_->setPredecessor(predecessor_);
+    }
+
+    std::cout << "Node " << (int)id_ << " has left the ring.\n";
+}
+
+
 // Find successor
 Node* Node::find_successor(uint8_t key) {
     if (inInterval(key, id_, successor_->getId(), false, true)) {
@@ -164,7 +194,6 @@ void Node::stabilize() {
         successor_ = x;
     }
 
-    // ✅ Ensure predecessor is correctly set
     if (successor_->getPredecessor() == nullptr || 
         inInterval(successor_->getPredecessor()->getId(), id_, successor_->getId(), false, false)) {
         successor_->setPredecessor(this);

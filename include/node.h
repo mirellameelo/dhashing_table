@@ -32,6 +32,7 @@ public:
      */
     void insert(uint8_t key, int value);
     void insert(uint8_t key);
+    void leave();
 
     /**
      * @brief Remove a key from the DHT.
