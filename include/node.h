@@ -30,6 +30,7 @@ public:
      * @brief Insert a key into the DHT.
      * @param key: The key to be stored.
      */
+    void insert(uint8_t key, int value);
     void insert(uint8_t key);
 
     /**
@@ -77,7 +78,7 @@ public:
 private:
     uint8_t id_;                     // Unique node ID in [0 .. 2^BITLENGTH-1]
     FingerTable fingerTable_;         // ✅ Remove duplicate!
-    std::map<uint8_t, uint8_t> localKeys_;  // Keys this node is responsible for
+    std::map<uint8_t, int> localKeys_;  // Keys this node is responsible for
     Node* successor_;                // Pointer to successor node
     Node* predecessor_;              // Pointer to predecessor node
     size_t nextFingerToFix_;         // Used by fix_fingers()

@@ -90,7 +90,31 @@ int main() {
 
 
     // 8. Test key lookups
-    testLookups(n0);
+    //testLookups(n0);
+
+    // 8. Insert keys into the Chord ring
+    std::cout << "\n=== Inserting Keys ===\n";
+    n0->insert(3, 3);
+    n1->insert(200);  
+    n2->insert(123);
+    n3->insert(45, 3);
+    n4->insert(99);
+    n2->insert(60, 10);
+    n0->insert(50, 8);
+    n3->insert(100, 5);
+    n3->insert(101, 4);
+    n3->insert(102, 6);
+    n5->insert(240, 8);
+    n5->insert(250, 10);
+
+    // 9. Print stored keys at each node
+    std::cout << "\n=== Stored Keys in Each Node ===\n";
+    n0->print_keys();
+    n1->print_keys();
+    n2->print_keys();
+    n3->print_keys();
+    n4->print_keys();
+    n5->print_keys();
 
     // 8. Clean up
     delete n0;

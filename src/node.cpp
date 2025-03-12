@@ -99,9 +99,20 @@ Node* Node::closest_preceding_finger(uint8_t key) {
 }
 
 // Insert a key
+// Overloaded insert() - Default to "None" when value is not provided
 void Node::insert(uint8_t key) {
+    insert(key, -1);  // Call the other insert with a default "None" value
+}
+
+// Main insert function - Stores key-value pairs
+void Node::insert(uint8_t key, int value) {
     Node* responsible = find_successor(key);
-    responsible->localKeys_[key] = key;
+    
+    // Store key with either an actual value or mark it as None (-1)
+    responsible->localKeys_[key] = value;
+
+    std::cout << "Key " << (int)key << " stored at Node " << (int)responsible->getId()
+              << " with value " << (value == -1 ? "None" : std::to_string(value)) << std::endl;
 }
 
 // Remove a key
@@ -117,15 +128,17 @@ void Node::print_finger_table() {
 
 // Print the keys stored locally on this node
 void Node::print_keys() {
-    std::cout << "Keys at Node " << (int)id_ << ": ";
+    std::cout << "Node id:" << (int)id_ << "\n";
     if (localKeys_.empty()) {
-        std::cout << "(none)";
+        std::cout << "(No keys stored)\n";
     } else {
+        std::cout << "{ ";
         for (auto& kv : localKeys_) {
-            std::cout << (int)kv.first << " ";
+            std::cout << (int)kv.first << ": " 
+                      << (kv.second == -1 ? "None" : std::to_string(kv.second)) << ", ";
         }
+        std::cout << "}\n";
     }
-    std::cout << "\n";
 }
 
 // Periodic stabilize
