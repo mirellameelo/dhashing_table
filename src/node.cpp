@@ -157,9 +157,11 @@ void Node::notify(Node* n) {
 
 // fix_fingers
 void Node::fix_fingers() {
-    uint16_t start = (id_ + (1 << (nextFingerToFix_ - 1))) % (1 << BITLENGTH);
-    Node* succ = find_successor((uint8_t)start);
-    fingerTable_.set(nextFingerToFix_, succ);
+    for (int i = 1; i <= BITLENGTH; i++) {
+        uint16_t start = (id_ + (1 << (i - 1))) % (1 << BITLENGTH);
+        Node* succ = find_successor(start);
 
-    nextFingerToFix_ = (nextFingerToFix_ % BITLENGTH) + 1;
+        fingerTable_.set(i, succ);
+    }
 }
+

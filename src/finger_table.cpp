@@ -40,13 +40,17 @@ void FingerTable::initialize() {
  * @brief Pretty print the finger table.
  */
 void FingerTable::prettyPrint() {
+    std::cout << "------------------------------\n";
     std::cout << "Finger Table of Node " << (int)owner_->getId() << ":\n";
+    std::cout << "  (Each entry k = i is calculated as: start = (ID + 2^(i-1)) mod " 
+              << (1 << BITLENGTH) << ")\n";
     for (size_t i = 1; i <= BITLENGTH; ++i) {
+        uint16_t start = (owner_->getId() + (1 << (i - 1))) % (1 << BITLENGTH);
         if (fingers_[i]) {
-            std::cout << "  Entry " << i << ": Node "
+            std::cout << "  k = " << i << " (start = " << start << ") : Node "
                       << (int)fingers_[i]->getId() << "\n";
         } else {
-            std::cout << "  Entry " << i << ": None\n";
+            std::cout << "  k = " << i << " (start = " << start << ") : None\n";
         }
     }
     std::cout << "------------------------------\n";
