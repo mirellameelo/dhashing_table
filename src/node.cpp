@@ -47,7 +47,7 @@ uint8_t Node::getId() {
 void Node::join(Node* knownNode) {
     if (knownNode == nullptr) {
         predecessor_ = nullptr;
-        successor_ = this;  
+        successor_ = this;
         std::cout << "Node " << (int)id_ << " created as FIRST node in Chord.\n";
     } else {
         successor_ = knownNode->find_successor(id_);
@@ -62,11 +62,23 @@ void Node::join(Node* knownNode) {
 
         std::cout << "Node " << (int)id_
                   << " joined via Node " << (int)knownNode->getId() << "\n";
+
+        std::vector<uint8_t> keysToMigrate;
+        for (auto& kv : successor_->localKeys_) {
+            if (inInterval(kv.first, predecessor_->getId(), id_, false, true)) {
+                keysToMigrate.push_back(kv.first);
+            }
+        }
+
+        for (uint8_t key : keysToMigrate) {
+            localKeys_[key] = successor_->localKeys_[key]; // Move key-value pair
+            successor_->localKeys_.erase(key); // Remove from old node
+            std::cout << "Migrated key " << (int)key << " to Node " << (int)id_ << std::endl;
+        }
     }
 
     fingerTable_.initialize();
 }
-
 
 // Find successor
 Node* Node::find_successor(uint8_t key) {

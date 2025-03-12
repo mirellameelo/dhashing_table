@@ -116,6 +116,57 @@ int main() {
     n4->print_keys();
     n5->print_keys();
 
+    // 10. Adding New Node (100) to the Ring
+    std::cout << "\n=== Adding Node(100) to the Ring ===\n";
+    Node* n6 = new Node(100);
+    n6->join(n0);
+
+    // 11. Re-stabilize all nodes
+    for (int i = 0; i < 5; i++) {
+        n0->stabilize();
+        n1->stabilize();
+        n2->stabilize();
+        n3->stabilize();
+        n4->stabilize();
+        n5->stabilize();
+        n6->stabilize();
+    }
+
+    // 12. Run fix_fingers() again
+    for (int i = 0; i < 5; i++) {
+        n0->fix_fingers();
+        n1->fix_fingers();
+        n2->fix_fingers();
+        n3->fix_fingers();
+        n4->fix_fingers();
+        n5->fix_fingers();
+        n6->fix_fingers();
+    }
+
+    // 13. Print the updated ring structure
+    std::cout << "\n=== Ring Structure After Adding Node(100) ===\n";
+    printRing(n0);
+
+    // // 14. Print each node’s updated finger table
+    // std::cout << "\n=== Updated Finger Tables After Adding Node(100) ===\n";
+    // n0->print_finger_table();
+    // n1->print_finger_table();
+    // n2->print_finger_table();
+    // n3->print_finger_table();
+    // n4->print_finger_table();
+    // n5->print_finger_table();
+    // n6->print_finger_table();
+
+    // 15. Print stored keys again (keys may be reassigned)
+    std::cout << "\n=== Updated Stored Key-Value Pairs After Adding Node(100) ===\n";
+    n0->print_keys();
+    n1->print_keys();
+    n2->print_keys();
+    n3->print_keys();
+    n4->print_keys();
+    n5->print_keys();
+    n6->print_keys();
+
     // 8. Clean up
     delete n0;
     delete n1;
