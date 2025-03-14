@@ -53,15 +53,8 @@ int main() {
     std::cout << "\n=== Ring Structure After Joining ===\n";
     printRing(n0);
 
-    // 4. Stabilize all nodes multiple times
-    for (int i = 0; i < 5; i++) {
-        n0->stabilize();
-        n1->stabilize();
-        n2->stabilize();
-        n3->stabilize();
-        n4->stabilize();
-        n5->stabilize();
-    }
+    // Dynamically collect all nodes from the Chord ring and stabilize
+    Node::stabilizeNetwork(n0);
 
     // 5. Print ring structure after stabilization
     // std::cout << "\n=== Ring Structure After Stabilization ===\n";
@@ -122,15 +115,7 @@ int main() {
     n6->join(n0);
 
     // 11. Re-stabilize all nodes
-    for (int i = 0; i < 5; i++) {
-        n0->stabilize();
-        n1->stabilize();
-        n2->stabilize();
-        n3->stabilize();
-        n4->stabilize();
-        n5->stabilize();
-        n6->stabilize();
-    }
+    Node::stabilizeNetwork(n0);
 
     // 12. Run fix_fingers() again
     for (int i = 0; i < 5; i++) {
@@ -167,20 +152,34 @@ int main() {
     n5->print_keys();
     n6->print_keys();
 
-    // 19. Re-stabilize the network after removal
-    for (int i = 0; i < 5; i++) {
-        n0->stabilize();
-        n1->stabilize();
-        n3->stabilize();
-        n4->stabilize();
-        n5->stabilize();
-        n6->stabilize();  // Keep stabilizing Node(100) if it exists
+    // 17. Lookup all keys from n0, n2, and n6
+    std::vector<uint8_t> keysToLookup = {3, 200, 123, 45, 99, 60, 50, 100, 101, 102, 240, 250};
+    std::vector<Node*> lookupNodes = {n0, n2, n6};  // Perform lookups from these nodes
+
+    std::cout << "\n=== Lookup Results and Paths ===\n";
+    for (Node* lookupNode : lookupNodes) {
+        std::cout << "From Node " << (int)lookupNode->getId() << ":\n";
+        for (uint8_t key : keysToLookup) {
+            Node* foundNode = lookupNode->find(key);
+            if (foundNode) {
+                std::cout << "  ✅ Key " << (int)key << " is stored at Node " << (int)foundNode->getId() << "\n";
+            } else {
+                std::cout << "  ❌ Key " << (int)key << " lookup failed!\n";
+            }
+        }
+        std::cout << "--------------------------------\n";
     }
-    
+    // 18. Remove Node 65 from the ring
+    std::cout << "\n=== Removing Node 65 ===\n";
+    n2->leave();  // Node 65 is n2
+
+    // 19. Re-stabilize the network after removal
+    Node::stabilizeNetwork(n0);
+
     // 20. Print the updated ring structure
     std::cout << "\n=== Ring Structure After Removing Node 65 ===\n";
     printRing(n0);
-
+    
     // 20. Fix finger tables for all nodes
     for (int i = 0; i < 5; i++) {
         n0->fix_fingers();

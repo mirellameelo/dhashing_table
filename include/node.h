@@ -25,6 +25,10 @@ public:
      *        the first node in the network, pass nullptr.
      */
     void join(Node* knownNode);
+    static void stabilizeAll(std::vector<Node*>& nodes);
+    std::vector<Node*> collectAllNodes();
+    static void stabilizeNetwork(Node* startNode);
+
 
     /**
      * @brief Insert a key into the DHT.

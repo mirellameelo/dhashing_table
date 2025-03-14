@@ -80,6 +80,35 @@ void Node::join(Node* knownNode) {
     fingerTable_.initialize();
 }
 
+void Node::stabilizeAll(std::vector<Node*>& nodes) {
+    for (int i = 0; i < 5; i++) {  // Run multiple rounds for full propagation
+        for (Node* node : nodes) {
+            node->stabilize();
+        }
+    }
+}
+
+std::vector<Node*> Node::collectAllNodes() {
+    std::vector<Node*> nodes;
+    Node* current = this;
+
+    do {
+        nodes.push_back(current);
+        current = current->getSuccessor();
+    } while (current != this);  // Stop when we complete the ring
+
+    return nodes;
+}
+
+void Node::stabilizeNetwork(Node* startNode) {
+    // Collect all nodes dynamically from the given starting node
+    std::vector<Node*> allNodes = startNode->collectAllNodes();
+
+    // Run stabilization on all collected nodes
+    std::cout << "\n=== Stabilizing all nodes ===\n";
+    Node::stabilizeAll(allNodes);
+}
+
 void Node::leave() {
     std::cout << "Node " << (int)id_ << " is leaving the ring.\n";
 
