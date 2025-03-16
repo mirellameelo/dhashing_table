@@ -4,7 +4,7 @@ A peer-to-peer distributed lookup system simulator implementing the Chord protoc
 
 ## 🚨 Note
 
-This simulator is part of the Computer Networks course (CSE 250A) at UC Santa Cruz, 2025.
+This simulator is a course project for Computer Networks (CSE 250A) at UC Santa Cruz, 2025
 
 Student: Ella Ferraz.
 
