@@ -3,9 +3,6 @@
 #include <limits>
 #include <cmath>
 
-// --------------------
-// Node Implementation
-// --------------------
 Node::Node(uint8_t id)
     : id_(id),
       fingerTable_(this),
@@ -93,7 +90,7 @@ void Node::fixAllFingers(Node* startNode) {
     std::vector<Node*> allNodes = startNode->collectAllNodes();
 
     // Run fix_fingers on each node multiple times
-    std::cout << "\n=== Fixing Finger Tables for All Nodes ===\n";
+    //std::cout << "\n=== Fixing Finger Tables for All Nodes ===\n";
     for (int i = 0; i < 5; i++) {  // Run multiple times for full updates
         for (Node* node : allNodes) {
             node->fix_fingers();
@@ -106,7 +103,7 @@ void Node::printAllKeys(Node* startNode) {
     std::vector<Node*> allNodes = startNode->collectAllNodes();
 
     // Print keys for each node
-    std::cout << "\n=== Stored Key-Value Pairs in All Nodes ===\n";
+    //std::cout << "\n=== Stored Key-Value Pairs in All Nodes ===\n";
     for (Node* node : allNodes) {
         node->print_keys();
     }
@@ -117,10 +114,46 @@ void Node::printAllFingerTables(Node* startNode) {
     std::vector<Node*> allNodes = startNode->collectAllNodes();
 
     // Print finger tables for each node
-    std::cout << "\n=== Finger Tables of All Nodes ===\n";
+    //std::cout << "\n=== Finger Tables of All Nodes ===\n";
     for (Node* node : allNodes) {
         node->print_finger_table();
     }
+}
+
+void Node::printRing(Node* startNode) {
+    if (!startNode) return;
+    
+    std::cout << "\n=== Chord Ring Structure ===\n";
+
+    Node* current = startNode;
+    do {
+        std::cout << "Node " << (int)current->getId() 
+                  << " -> Successor: " << (int)current->getSuccessor()->getId() 
+                  << " | Predecessor: " 
+                  << (current->getPredecessor() ? std::to_string(current->getPredecessor()->getId()) : "None") 
+                  << std::endl;
+        current = current->getSuccessor();
+    } while (current != startNode);  // Stop when we've completed a full cycle
+
+    std::cout << "============================\n";
+}
+
+Node* Node::find(uint8_t key) {
+    std::cout << "Lookup key " << (int)key << ": ";
+    
+    Node* current = this;
+    while (!inInterval(key, current->getId(), current->successor_->getId(), false, true)) {
+        std::cout << (int)current->getId() << " -> ";
+        current = current->closest_preceding_finger(key);
+
+        if (current == this) {  // Prevent infinite loop in case of errors
+            std::cout << "ERROR: Lookup failed!\n";
+            return nullptr;
+        }
+    }
+    
+    std::cout << (int)current->getId() << " -> " << (int)current->successor_->getId() << " (found)\n";
+    return current->successor_;
 }
 
 void Node::deleteAllNodes(Node* startNode) {
@@ -133,7 +166,6 @@ void Node::deleteAllNodes(Node* startNode) {
         delete node;
     }
 }
-
 
 std::vector<Node*> Node::collectAllNodes() {
     std::vector<Node*> nodes;
@@ -152,7 +184,7 @@ void Node::stabilizeNetwork(Node* startNode) {
     std::vector<Node*> allNodes = startNode->collectAllNodes();
 
     // Run stabilization on all collected nodes
-    std::cout << "\n=== Stabilizing all nodes ===\n";
+    //std::cout << "\n=== Stabilizing all nodes ===\n";
     Node::stabilizeAll(allNodes);
 }
 
@@ -165,7 +197,6 @@ void Node::leave() {
         return;
     }
 
-    // 1️⃣ Transfer stored keys to successor
     if (successor_ != this) {
         for (auto& kv : localKeys_) {
             successor_->localKeys_[kv.first] = kv.second;
@@ -174,7 +205,6 @@ void Node::leave() {
         localKeys_.clear();  // Empty key storage from this node
     }
 
-    // 2️⃣ Update predecessor & successor links
     if (predecessor_) {
         predecessor_->setSuccessor(successor_);
     }
@@ -184,7 +214,6 @@ void Node::leave() {
 
     std::cout << "Node " << (int)id_ << " has left the ring.\n";
 }
-
 
 // Find successor
 Node* Node::find_successor(uint8_t key) {
