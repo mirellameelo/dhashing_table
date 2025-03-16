@@ -88,6 +88,53 @@ void Node::stabilizeAll(std::vector<Node*>& nodes) {
     }
 }
 
+void Node::fixAllFingers(Node* startNode) {
+    // Collect all nodes dynamically
+    std::vector<Node*> allNodes = startNode->collectAllNodes();
+
+    // Run fix_fingers on each node multiple times
+    std::cout << "\n=== Fixing Finger Tables for All Nodes ===\n";
+    for (int i = 0; i < 5; i++) {  // Run multiple times for full updates
+        for (Node* node : allNodes) {
+            node->fix_fingers();
+        }
+    }
+}
+
+void Node::printAllKeys(Node* startNode) {
+    // Collect all nodes dynamically
+    std::vector<Node*> allNodes = startNode->collectAllNodes();
+
+    // Print keys for each node
+    std::cout << "\n=== Stored Key-Value Pairs in All Nodes ===\n";
+    for (Node* node : allNodes) {
+        node->print_keys();
+    }
+}
+
+void Node::printAllFingerTables(Node* startNode) {
+    // Collect all nodes dynamically
+    std::vector<Node*> allNodes = startNode->collectAllNodes();
+
+    // Print finger tables for each node
+    std::cout << "\n=== Finger Tables of All Nodes ===\n";
+    for (Node* node : allNodes) {
+        node->print_finger_table();
+    }
+}
+
+void Node::deleteAllNodes(Node* startNode) {
+    // Collect all nodes dynamically
+    std::vector<Node*> allNodes = startNode->collectAllNodes();
+
+    // Delete all nodes
+    std::cout << "\n=== Cleaning Up: Deleting All Nodes ===\n";
+    for (Node* node : allNodes) {
+        delete node;
+    }
+}
+
+
 std::vector<Node*> Node::collectAllNodes() {
     std::vector<Node*> nodes;
     Node* current = this;

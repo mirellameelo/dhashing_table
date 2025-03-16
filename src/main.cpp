@@ -56,12 +56,6 @@ int main() {
     // Dynamically collect all nodes from the Chord ring and stabilize
     Node::stabilizeNetwork(n0);
 
-    // 5. Print ring structure after stabilization
-    // std::cout << "\n=== Ring Structure After Stabilization ===\n";
-    // printRing(n0);
-
-    //OKAY UP TO HERE
-
     // 6. Run fix_fingers() multiple times
     for (int i = 0; i < 5; i++) {
         n0->fix_fingers();
@@ -81,10 +75,6 @@ int main() {
     n4->print_finger_table();
     n5->print_finger_table();
 
-
-    // 8. Test key lookups
-    //testLookups(n0);
-
     // 8. Insert keys into the Chord ring
     std::cout << "\n=== Inserting Keys ===\n";
     n0->insert(3, 3);
@@ -102,12 +92,7 @@ int main() {
 
     // 9. Print stored keys at each node
     std::cout << "\n=== Stored Keys in Each Node ===\n";
-    n0->print_keys();
-    n1->print_keys();
-    n2->print_keys();
-    n3->print_keys();
-    n4->print_keys();
-    n5->print_keys();
+    Node::printAllKeys(n0);
 
     // 10. Adding New Node (100) to the Ring
     std::cout << "\n=== Adding Node(100) to the Ring ===\n";
@@ -118,15 +103,7 @@ int main() {
     Node::stabilizeNetwork(n0);
 
     // 12. Run fix_fingers() again
-    for (int i = 0; i < 5; i++) {
-        n0->fix_fingers();
-        n1->fix_fingers();
-        n2->fix_fingers();
-        n3->fix_fingers();
-        n4->fix_fingers();
-        n5->fix_fingers();
-        n6->fix_fingers();
-    }
+    Node::fixAllFingers(n0);
 
     // 13. Print the updated ring structure
     std::cout << "\n=== Ring Structure After Adding Node(100) ===\n";
@@ -134,44 +111,12 @@ int main() {
 
     // // 14. Print each node’s updated finger table
     // std::cout << "\n=== Updated Finger Tables After Adding Node(100) ===\n";
-    // n0->print_finger_table();
-    // n1->print_finger_table();
-    // n2->print_finger_table();
-    // n3->print_finger_table();
-    // n4->print_finger_table();
-    // n5->print_finger_table();
-    // n6->print_finger_table();
+    // Node::printAllFingerTables(n0);
+
 
     // 15. Print stored keys again (keys may be reassigned)
     std::cout << "\n=== Updated Stored Key-Value Pairs After Adding Node(100) ===\n";
-    n0->print_keys();
-    n1->print_keys();
-    n2->print_keys();
-    n3->print_keys();
-    n4->print_keys();
-    n5->print_keys();
-    n6->print_keys();
-
-    // 17. Lookup all keys from n0, n2, and n6
-    std::vector<uint8_t> keysToLookup = {3, 200, 123, 45, 99, 60, 50, 100, 101, 102, 240, 250};
-    std::vector<Node*> lookupNodes = {n0, n2, n6};  // Perform lookups from these nodes
-
-    std::cout << "\n=== Lookup Results and Paths ===\n";
-    for (Node* lookupNode : lookupNodes) {
-        std::cout << "From Node " << (int)lookupNode->getId() << ":\n";
-        for (uint8_t key : keysToLookup) {
-            Node* foundNode = lookupNode->find(key);
-            if (foundNode) {
-                std::cout << "  ✅ Key " << (int)key << " is stored at Node " << (int)foundNode->getId() << "\n";
-            } else {
-                std::cout << "  ❌ Key " << (int)key << " lookup failed!\n";
-            }
-        }
-        std::cout << "--------------------------------\n";
-    }
-    // 18. Remove Node 65 from the ring
-    std::cout << "\n=== Removing Node 65 ===\n";
-    n2->leave();  // Node 65 is n2
+    Node::printAllKeys(n0);
 
     // 19. Re-stabilize the network after removal
     Node::stabilizeNetwork(n0);
@@ -181,42 +126,17 @@ int main() {
     printRing(n0);
     
     // 20. Fix finger tables for all nodes
-    for (int i = 0; i < 5; i++) {
-        n0->fix_fingers();
-        n1->fix_fingers();
-        n3->fix_fingers();
-        n4->fix_fingers();
-        n5->fix_fingers();
-        n6->fix_fingers();
-    }
-
-    // 21. Print the updated finger tables
+    Node::fixAllFingers(n0);
     std::cout << "\n=== Updated Finger Tables After Removing Node 65 ===\n";
-    n0->print_finger_table();
-    n1->print_finger_table();
-    n3->print_finger_table();
-    n4->print_finger_table();
-    n5->print_finger_table();
-    n6->print_finger_table();
+    Node::printAllFingerTables(n0);
 
 
     // // 21. Print stored keys again to verify successful transfer
     // std::cout << "\n=== Updated Stored Key-Value Pairs After Removing Node 65 ===\n";
-    // n0->print_keys();
-    // n1->print_keys();
-    // n3->print_keys();
-    // n4->print_keys();
-    // n5->print_keys();
-    // n6->print_keys();
+    // Node::printAllKeys(n0);
 
     // 8. Clean up
-    delete n0;
-    delete n1;
-    delete n2;
-    delete n3;
-    delete n4;
-    delete n5;
-    delete n6;
+    Node::deleteAllNodes(n0);
 
     return 0;
 }

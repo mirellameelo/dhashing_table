@@ -28,6 +28,13 @@ public:
     static void stabilizeAll(std::vector<Node*>& nodes);
     std::vector<Node*> collectAllNodes();
     static void stabilizeNetwork(Node* startNode);
+    static void fixAllFingers(Node* startNode);
+    static void printAllKeys(Node* startNode);
+    static void printAllFingerTables(Node* startNode);
+    static void deleteAllNodes(Node* startNode);
+
+
+
 
 
     /**
