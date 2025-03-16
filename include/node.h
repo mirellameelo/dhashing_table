@@ -24,7 +24,6 @@ public:
     static void printAllFingerTables(Node* startNode);
     static void printRing(Node* startNode);
     static void deleteAllNodes(Node* startNode);
-    Node* find(uint8_t key);
     void insert(uint8_t key, int value);
     void insert(uint8_t key);
     void leave();
@@ -35,6 +34,8 @@ public:
     void stabilize();
     void notify(Node* n);
     void fix_fingers();
+    void find(uint8_t key);
+
 
     uint8_t getId();
     Node* getSuccessor() { return successor_; }

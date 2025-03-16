@@ -138,22 +138,20 @@ void Node::printRing(Node* startNode) {
     std::cout << "============================\n";
 }
 
-Node* Node::find(uint8_t key) {
-    std::cout << "Lookup key " << (int)key << ": ";
-    
-    Node* current = this;
-    while (!inInterval(key, current->getId(), current->successor_->getId(), false, true)) {
-        std::cout << (int)current->getId() << " -> ";
-        current = current->closest_preceding_finger(key);
+void Node::find(uint8_t key) {
+    std::cout << "\n Look-up result of key " << (int)key
+              << " from Node " << (int)this->getId() << ":\n";
 
-        if (current == this) {  // Prevent infinite loop in case of errors
-            std::cout << "ERROR: Lookup failed!\n";
-            return nullptr;
-        }
+    Node* responsibleNode = this->find_successor(key);
+    int value = -1;
+
+    if (responsibleNode->localKeys_.count(key)) {
+        value = responsibleNode->localKeys_[key];
     }
-    
-    std::cout << (int)current->getId() << " -> " << (int)current->successor_->getId() << " (found)\n";
-    return current->successor_;
+
+    std::cout << " Found at Node " << (int)responsibleNode->getId() << "\n"
+              << " Key " << (int)key << " -> Value: "
+              << (value == -1 ? "None" : std::to_string(value)) << "\n";
 }
 
 void Node::deleteAllNodes(Node* startNode) {
@@ -161,7 +159,7 @@ void Node::deleteAllNodes(Node* startNode) {
     std::vector<Node*> allNodes = startNode->collectAllNodes();
 
     // Delete all nodes
-    std::cout << "\n=== Cleaning Up: Deleting All Nodes ===\n";
+    //std::cout << "\n=== Cleaning Up: Deleting All Nodes ===\n";
     for (Node* node : allNodes) {
         delete node;
     }
@@ -217,11 +215,18 @@ void Node::leave() {
 
 // Find successor
 Node* Node::find_successor(uint8_t key) {
+    // If the key is exactly this node's ID, we are responsible.
+    if (key == id_) {
+        return this;
+    }
+
+    // Otherwise check if key is in (id_, successor->id].
     if (inInterval(key, id_, successor_->getId(), false, true)) {
         return successor_;
     } else {
         Node* node = closest_preceding_finger(key);
-        return node == this ? successor_ : node->find_successor(key);
+        // If node == this, we can just return successor_, or handle it carefully:
+        return (node == this) ? successor_ : node->find_successor(key);
     }
 }
 
