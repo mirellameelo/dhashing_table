@@ -2,23 +2,7 @@
 
 A peer-to-peer distributed lookup system simulator implementing the Chord protocol for efficient key-value storage and retrieval.
 
-## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Output Format](#output)
-- [Troubleshooting](#troubleshooting)
-
-## ✨ Features
-
-- Node management in Chord ring
-- Finger table maintenance
-- Key insertion and storage
-- Efficient key lookup
-- Node failure handling
-
-## 🔧 Installation
+## 🔧 Build
 
 1. Ensure you have g++ installed:
 
@@ -32,9 +16,7 @@ sudo apt install g++
 make
 ```
 
-## 🚀 Usage
-
-Run the simulator:
+Run:
 
 ```bash
 ./dht_simulator
