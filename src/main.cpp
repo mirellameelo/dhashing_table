@@ -72,6 +72,7 @@ int main() {
     std::cout << "\n========================= Task 5: Removing Node 65, and printing finger table =========================\n";
     n2->leave();
     Node::stabilizeNetwork(n0);
+    Node::fixAllFingers(n0);
     Node::printAllFingerTables(n0);
 
     // Clean up
