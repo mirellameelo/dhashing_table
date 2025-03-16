@@ -2,21 +2,32 @@
 
 A peer-to-peer distributed lookup system simulator implementing the Chord protocol for efficient key-value storage and retrieval.
 
-## 🔧 Build
+## 🚨 Note
+
+This simulator is part of the Computer Networks course (CSE 250A) at UC Santa Cruz, 2025.
+
+Student: Ella Ferraz.
+
+
+## 🔧 Build and Run
 
 1. Ensure you have g++ installed:
 
 ```bash
 sudo apt install g++
 ```
+2. Navigate to the project folder
 
-1. Compile the project:
+```bash
+cd dhashing_table
+```
+3. Compile the project:
 
 ```bash
 make
 ```
 
-Run:
+4. Run
 
 ```bash
 ./dht_simulator
